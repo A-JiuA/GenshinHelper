@@ -4,11 +4,23 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/drawable/ic_launcher_background.xml" value="0.367" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/drawable/navigation.xml" value="0.367" />
         <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/drawable/round_edge.xml" value="0.367" />
         <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout-v31/alertdialog_first_launch.xml" value="0.36614583333333334" />
         <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/activity_main.xml" value="0.365625" />
         <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/activity_webview.xml" value="0.36614583333333334" />
         <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/alertdialog_first_launch.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/fragment_main.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/fragment_map.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/fragment_settings.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/fragment_tools.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/item_pager.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/main_navigation.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/viewpager_main.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/viewpager_map.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/viewpager_settings.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/layout/viewpager_tools.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GenshinHelper/app/src/main/res/menu/navigation.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>

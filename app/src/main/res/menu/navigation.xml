@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main"
+        android:icon="@drawable/main"
+        android:title="概览"/>
+    <item
+        android:id="@+id/tools"
+        android:icon="@drawable/tools"
+        android:title="工具"/>
+    <item
+        android:id="@+id/map"
+        android:icon="@drawable/map"
+        android:title="图鉴"/>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/settings"
+        android:title="设置"/>
+</menu>

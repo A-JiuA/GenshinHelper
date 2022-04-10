@@ -4,6 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".MainActivity"
+    android:background="#EDEFED"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:background="#EDEFED"
+            android:layout_alignParentStart="true"
+            android:id="@+id/bottomNavigation"
+            android:layout_width="210dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
+            app:itemIconSize="24dp"
+            app:elevation="0dp"
+            app:itemTextColor="@drawable/navigation"
+            app:itemIconTint="@drawable/navigation"
+            app:menu="@menu/navigation"/>
+        <Button
+            android:background="@drawable/account_switcher"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:id="@+id/AccountSwitcher"
+            android:layout_margin="18dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/AccountSwitcher"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
+            android:id="@+id/tv_account"
+            android:text="是阿九阿"/>
+    </RelativeLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/MainActivityViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
