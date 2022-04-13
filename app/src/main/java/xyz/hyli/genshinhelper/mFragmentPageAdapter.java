@@ -9,9 +9,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class mFragmentPagerAdapter extends FragmentStateAdapter {
+public class mFragmentPageAdapter extends FragmentStateAdapter {
     List<Fragment> fragmentList = new ArrayList<>();
-    public mFragmentPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<Fragment> fragmentList) {
+    public mFragmentPageAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, List<Fragment> fragmentList) {
         super(fragmentManager, lifecycle);
         this.fragmentList = fragmentList;
     }

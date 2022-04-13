@@ -10,15 +10,14 @@
     <RelativeLayout
         android:id="@+id/bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content">
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:background="#EDEFED"
             android:layout_alignParentStart="true"
             android:id="@+id/bottomNavigation"
-            android:layout_width="210dp"
+            android:layout_width="180dp"
             android:layout_marginRight="10dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             app:itemIconSize="24dp"
             app:elevation="0dp"
             app:itemTextColor="@drawable/navigation"
@@ -28,18 +27,31 @@
             android:background="@drawable/account_switcher"
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical"
-            android:id="@+id/AccountSwitcher"
+            android:id="@+id/bt_AccountSwitcher"
             android:layout_margin="18dp"
             android:layout_width="20dp"
             android:layout_height="20dp"/>
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/AccountSwitcher"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="18dp"
-            android:id="@+id/tv_account"
-            android:text="是阿九阿"/>
+            android:layout_height="56dp"
+            android:orientation="vertical"
+            android:layout_toLeftOf="@id/bt_AccountSwitcher"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="left"
+                android:id="@+id/tv_account_nickname"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="left"
+                android:id="@+id/tv_account_uid"/>
+        </LinearLayout>
+
     </RelativeLayout>
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/MainActivityViewPager"

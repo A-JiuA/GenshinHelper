@@ -12,6 +12,7 @@ public class mFragment extends Fragment {
     private View view;
     private String mView;
 
+
     public mFragment() {
 
     }
@@ -39,7 +40,6 @@ public class mFragment extends Fragment {
         switch (mView) {
             case "工具" :
                 view = inflater.inflate(R.layout.fragment_tools, container, false);
-
                 break;
             case "图鉴" :
                 view = inflater.inflate(R.layout.fragment_map, container, false);

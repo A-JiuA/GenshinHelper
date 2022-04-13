@@ -1,17 +1,25 @@
 package xyz.hyli.genshinhelper;
 
-import com.alibaba.fastjson.*;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MihoyoAPIs {
-    private static final String UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.11.1";
-    private static final String AppVersion = "2.11.1";
+    public static final String UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.11.1";
+    public static final String AppVersion = "2.11.1";
 
     // 通过login_ticket获取SToken
     public static String getMultiTokenByLoginTicket(String login_ticket, String accountId) {
@@ -33,6 +41,7 @@ public class MihoyoAPIs {
                     SToken = tokens.getString("token");
                 }
             }
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return SToken;
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,6 +63,7 @@ public class MihoyoAPIs {
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
             String cookie_token = data.getString("cookie_token");
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return cookie_token;
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,6 +89,7 @@ public class MihoyoAPIs {
             JSONObject cookie_info = JSON.parseObject(data.getString("cookie_info"));
             // String account_id = cookie_info.getString("account_id");
             // String cookie_token = cookie_info.getString("cookie_token");
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return cookie_info;
         } catch (IOException e) {
             e.printStackTrace();
@@ -110,6 +121,7 @@ public class MihoyoAPIs {
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
             List<JSONObject> list = JSON.parseArray(data.getJSONArray("list").toJSONString(), JSONObject.class);
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return list;
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,6 +148,7 @@ public class MihoyoAPIs {
             Response response = call.execute();
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -167,7 +180,9 @@ public class MihoyoAPIs {
         Call call = okHttpClient.newCall(request);
         try {
             Response response = call.execute();
-            return JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
+            JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
+            return text;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -190,6 +205,7 @@ public class MihoyoAPIs {
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
             List<JSONObject> awards = JSON.parseArray(data.getJSONArray("awards").toJSONString(), JSONObject.class);
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return awards;
         } catch (IOException e) {
             e.printStackTrace();
@@ -214,6 +230,7 @@ public class MihoyoAPIs {
             Response response = call.execute();
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -222,17 +239,14 @@ public class MihoyoAPIs {
     }
 
     // 获取今日奖励
-    public static JSONObject getTodayAward(String Uid, String ServerID, String Cookie) {
-        JSONObject SignInfo = getSignInfo(Uid, ServerID, Cookie);
-        List<JSONObject> AwardList = getSignAward();
+    public static JSONObject getTodayAward(String Uid, String ServerID, String Cookie, JSONObject SignInfo, List<JSONObject> AwardList) {
         JSONObject award = null;
-        assert SignInfo != null;
-        assert AwardList != null;
         if (SignInfo.getBooleanValue("is_sign")) {
             award = AwardList.get(SignInfo.getIntValue("total_sign_day") - 1);
         } else {
             award = AwardList.get(SignInfo.getIntValue("total_sign_day"));
         }
+        Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),award.toString());
         return award;
     }
 
@@ -263,6 +277,7 @@ public class MihoyoAPIs {
                     gameRecordCard = object;
                 }
             }
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return gameRecordCard;
         } catch (IOException e) {
             e.printStackTrace();
@@ -289,6 +304,7 @@ public class MihoyoAPIs {
             Response response = call.execute();
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -325,6 +341,7 @@ public class MihoyoAPIs {
             for (JSONObject object: avatars) {
                 avatars1.put(object.getString("id"),object);
             }
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),avatars1.toString());
             return avatars1;
         } catch (IOException e) {
             e.printStackTrace();
@@ -351,6 +368,7 @@ public class MihoyoAPIs {
             Response response = call.execute();
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -378,6 +396,7 @@ public class MihoyoAPIs {
             Response response = call.execute();
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -408,6 +427,7 @@ public class MihoyoAPIs {
             Response response = call.execute();
             JSONObject text = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
             JSONObject data = JSONObject.parseObject(text.getString("data"));
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),text.toString());
             return data;
         } catch (IOException e) {
             e.printStackTrace();
@@ -459,6 +479,7 @@ public class MihoyoAPIs {
                     page += 1;
                 }
             }
+            Log.i(Thread.currentThread().getStackTrace()[2].getMethodName(),list.toString());
             return list;
         } catch (IOException e) {
             e.printStackTrace();

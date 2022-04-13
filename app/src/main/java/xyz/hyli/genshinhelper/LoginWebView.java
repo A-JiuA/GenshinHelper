@@ -1,12 +1,10 @@
 package xyz.hyli.genshinhelper;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -14,8 +12,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-import android.content.ClipboardManager;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
@@ -24,17 +23,12 @@ import java.util.List;
 public class LoginWebView extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webview);
+        setContentView(R.layout.activity_loginwebview);
         WebView webView = this.findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
-//        String ua = webView.getSettings().getUserAgentString();
-//        webView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36 Edg/99.0.1150.39");
+        webView.getSettings().setUserAgentString(MihoyoAPIs.UA);
         CookieManager.getInstance().removeAllCookie();
-//        WebView.setWebContentsDebuggingEnabled(true);
-        webView.clearCache(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.getSettings().setDomStorageEnabled(true);
@@ -68,27 +62,60 @@ public class LoginWebView extends Activity {
                                     } else {
                                         login_ticket = Cookie.substring(Cookie.indexOf("login_ticket=")+13,Cookie.indexOf(";",Cookie.indexOf("login_ticket=")));
                                     }
-                                    // 得到Cookie
-                                    JSONObject cookie_info = MihoyoAPIs.getCookieAccountInfoByLoginTicket(login_ticket);
-                                    String account_id = cookie_info.getString("account_id");
-                                    String cookie_token = cookie_info.getString("cookie_token");
-                                    String Cookie = "account_id=" + account_id + ";cookie_token=" + cookie_token;
-                                    String SToken = MihoyoAPIs.getMultiTokenByLoginTicket(login_ticket,account_id);
-                                    // 得到绑定角色信息
-                                    List<JSONObject> gameRoles = MihoyoAPIs.getUserGameRolesByCookie(Cookie);
-
-                                    // 测试 获取SToken
-//                                    runOnUiThread(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            Toast.makeText(webView.this,SToken,Toast.LENGTH_LONG).show();
-//                                        }
-//                                    });
-
                                     // 将信息写入数据库
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            JSONObject cookie_info = MihoyoAPIs.getCookieAccountInfoByLoginTicket(login_ticket);
+                                            String account_id = cookie_info.getString("account_id");
+                                            String SToken = MihoyoAPIs.getMultiTokenByLoginTicket(login_ticket,account_id);
+                                            String cookie_token = MihoyoAPIs.getCookieAccountInfoBySToken(SToken, account_id);
+                                            String Cookie = "account_id=" + account_id + ";cookie_token=" + cookie_token;
+                                            // 得到绑定角色信息
+                                            List<JSONObject> UserGameRoles = MihoyoAPIs.getUserGameRolesByCookie(Cookie);
+                                            for (JSONObject role : UserGameRoles) {
+                                                new Thread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        SharedPreferences sharedPreferences = getSharedPreferences("data", Context.MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                        JSONArray array = JSON.parseArray(sharedPreferences.getString("uid_list", "[]"));
+                                                        if (array.contains(role.getString("game_uid"))) {
+                                                            array.add(role.getString("game_uid"));
+                                                            editor.putString("uid_list",JSON.toJSONString(array));
+                                                        }
+                                                        if (role.getBoolean("is_chosen")) {
+                                                            editor.putString("default_uid", role.getString("game_uid"));
+                                                            editor.putString("default_nickname", role.getString("nickname"));
+                                                            editor.putString("default_level", role.getString("level"));
+                                                            editor.putString("default_region_name", role.getString("region_name"));
+                                                            editor.putString("default_region", role.getString("region"));
+                                                            editor.putString("default_cookie", Cookie);
+                                                        }
+                                                        editor.commit();
+                                                    }
+                                                }).start();
+                                                SharedPreferences sharedPreferences = getSharedPreferences(role.getString("game_uid"), Context.MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putString("Uid", role.getString("game_uid"));
+                                                editor.putString("level", role.getString("level"));
+                                                editor.putString("nickname", role.getString("nickname"));
+                                                editor.putString("region_name", role.getString("region_name"));
+                                                editor.putString("ServerID", role.getString("region"));
+                                                editor.putString("Cookie", Cookie);
+                                                editor.putString("account_id", account_id);
+                                                editor.putString("SToken", SToken);
+                                                editor.commit();
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(LoginWebView.this,"登录成功，已自动获取Cookie",Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }).start();
 
-
-                                    success_flag = true;
                                 } catch (Exception e) {
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -97,19 +124,6 @@ public class LoginWebView extends Activity {
                                             Toast.makeText(LoginWebView.this,e.toString(),Toast.LENGTH_LONG).show();
                                         }
                                     });
-
-                                } finally {
-                                    if (success_flag){
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                                ClipData mClipData = ClipData.newPlainText("Label", "" );
-                                                cm.setPrimaryClip(mClipData);
-                                                Toast.makeText(LoginWebView.this,"登录成功，已自动获取Cookie",Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
                                 }
                             }
                         }).start();
