@@ -10,12 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -37,8 +36,6 @@ import java.util.List;
  * @author Ajiu
  */
 public class MainActivity extends FragmentActivity {
-    private LayoutInflater inflater;
-    private LinearLayout fragment_main,fragment_tools,fragment_map,fragment_settings;
     private TextView tv_account_nickname,tv_account_uid;
     private String SToken;
     private String Uid,ServerID,Cookie;
@@ -51,7 +48,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        inflater = LayoutInflater.from(this);
         data = getSharedPreferences("data", Context.MODE_PRIVATE);
         uid_list = JSON.parseArray(data.getString("uid_list", "[]"));
         default_Uid = data.getString("default_uid", "");
@@ -69,11 +65,9 @@ public class MainActivity extends FragmentActivity {
         }
         initFragment();
         initInfo();
-        showView_Sign();
-
 
     }
-    public void initInfo() {
+    private void initInfo() {
         tv_account_nickname = findViewById(R.id.tv_account_nickname);
         tv_account_uid = findViewById(R.id.tv_account_uid);
         if (default_Uid != "") {
@@ -85,11 +79,17 @@ public class MainActivity extends FragmentActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.i("uid_list",uid_list.toString());
+                List<String> ac_l = new ArrayList<>();
                 for (Object uid : uid_list) {
                     SharedPreferences sharedPreferences = getSharedPreferences(uid.toString(), Context.MODE_PRIVATE);
                     String account_id = sharedPreferences.getString("account_id", null);
                     String SToken = sharedPreferences.getString("SToken", null);
-                    updateUserRoleInfo(SToken,account_id);
+                    if (ac_l.contains(account_id) == false) {
+                        ac_l.add(account_id);
+                        updateUserRoleInfo(SToken,account_id);
+                    }
+
                 }
             }
         }).start();
@@ -107,12 +107,7 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         public void run() {
                             SharedPreferences.Editor editor = data.edit();
-                            JSONArray array = JSON.parseArray(data.getString("uid_list", "[]"));
-                            if (array.contains(role.getString("game_uid"))) {
-                                array.add(role.getString("game_uid"));
-                                editor.putString("uid_list", JSON.toJSONString(array));
-                            }
-                            if (role.getString("Uid") == default_Uid) {
+                            if (role.getString("game_uid").contains(default_Uid)) {
                                 editor.putString("default_uid", role.getString("game_uid"));
                                 editor.putString("default_nickname", role.getString("nickname"));
                                 editor.putString("default_level", role.getString("level"));
@@ -179,15 +174,10 @@ public class MainActivity extends FragmentActivity {
             }
             return true;
         });
-        //bt_accountswitcher.setOnClickListener();
-        fragment_main = inflater.inflate(R.layout.fragment_main, null).findViewById(R.id.fragment_main);
-        fragment_tools = inflater.inflate(R.layout.fragment_tools, null).findViewById(R.id.fragment_tools);
-        fragment_map = inflater.inflate(R.layout.fragment_map, null).findViewById(R.id.fragment_map);
-        fragment_settings = inflater.inflate(R.layout.fragment_settings, null).findViewById(R.id.fragment_settings);
     }
     private void showView_Sign() {
-        ImageView main_sign_award_img = inflater.inflate(R.layout.fragment_main, null).findViewById(R.id.main_sign_award_img);
-        TextView main_sign_award_txt = inflater.inflate(R.layout.fragment_main, null).findViewById(R.id.main_sign_award_txt);
+        ImageView main_sign_award_img = findViewById(R.id.main_sign_award_img);
+        TextView main_sign_award_txt = findViewById(R.id.main_sign_award_txt);
         main_sign_award_txt.setText("111");
         if (default_Uid != "") {
             new Thread(new Runnable() {
@@ -231,7 +221,7 @@ public class MainActivity extends FragmentActivity {
             }).start();
         }
     }
-    public void startLoginwebView(View view) {
+    public void startLoginWebView(View view) {
         startActivity(new Intent(this, LoginWebView.class));
     }
 

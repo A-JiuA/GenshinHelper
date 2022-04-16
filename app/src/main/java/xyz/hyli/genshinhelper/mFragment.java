@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 
 public class mFragment extends Fragment {
     private static final String ARG_VIEW = "概览";
-    private View view;
+    public View view;
     private String mView;
 
 

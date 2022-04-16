@@ -80,7 +80,7 @@ public class LoginWebView extends Activity {
                                                         SharedPreferences sharedPreferences = getSharedPreferences("data", Context.MODE_PRIVATE);
                                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                                         JSONArray array = JSON.parseArray(sharedPreferences.getString("uid_list", "[]"));
-                                                        if (array.contains(role.getString("game_uid"))) {
+                                                        if (array.contains(role.getString("game_uid")) == false) {
                                                             array.add(role.getString("game_uid"));
                                                             editor.putString("uid_list",JSON.toJSONString(array));
                                                         }
@@ -130,6 +130,7 @@ public class LoginWebView extends Activity {
                     } else {
                         Toast.makeText(LoginWebView.this,"登录失败",Toast.LENGTH_LONG).show();
                     }
+
                     finish();
                 }
             }
