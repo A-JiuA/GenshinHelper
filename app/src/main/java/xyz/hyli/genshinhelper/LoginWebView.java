@@ -24,7 +24,7 @@ public class LoginWebView extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loginwebview);
+        setContentView(R.layout.webview);
         WebView webView = this.findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUserAgentString(MihoyoAPIs.UA);
@@ -106,13 +106,13 @@ public class LoginWebView extends Activity {
                                                 editor.putString("account_id", account_id);
                                                 editor.putString("SToken", SToken);
                                                 editor.commit();
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Toast.makeText(LoginWebView.this,"登录成功，已自动获取Cookie",Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
                                             }
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(LoginWebView.this,"登录成功，已自动获取Cookie",Toast.LENGTH_LONG).show();
+                                                }
+                                            });
                                         }
                                     }).start();
 
@@ -130,7 +130,7 @@ public class LoginWebView extends Activity {
                     } else {
                         Toast.makeText(LoginWebView.this,"登录失败",Toast.LENGTH_LONG).show();
                     }
-
+                    setResult(101);
                     finish();
                 }
             }

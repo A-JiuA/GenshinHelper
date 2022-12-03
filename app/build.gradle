@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "xyz.hyli.genshinhelper"
-        minSdk 21
+        minSdk 29
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -38,5 +38,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.alibaba:fastjson:1.2.79'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha10'
 
 }
